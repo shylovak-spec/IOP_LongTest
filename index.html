@@ -4,14 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Інструкції з Охорони Праці</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* Стилі для чорно-білого оформлення */
+        /* Стилі для чорно-білого оформлення та Roboto */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif; /* Встановлено Roboto */
             margin: 0;
-            padding: 20px 0; /* Зменшуємо верхній/нижній відступ */
+            padding: 20px 0;
             background-color: #000;
             color: #fff;
+            /* Додано відступ для прокрутки, щоб фіксований плеєр не закривав контент */
+            padding-bottom: 120px; 
         }
         .container {
             max-width: 800px;
@@ -24,14 +27,14 @@
             text-transform: uppercase;
             color: #fff;
             margin-bottom: 20px;
-            font-size: 1.5em; /* Зменшено для мобільної адаптації */
+            font-size: 1.5em;
         }
         ol {
             list-style: none;
             padding: 0;
         }
         li {
-            padding: 15px 10px; /* Збільшено тач-зону для пальців */
+            padding: 15px 10px;
             border-bottom: 1px dashed #444;
             cursor: pointer;
             transition: background-color 0.2s;
@@ -51,7 +54,7 @@
 
         /* Стилі для адаптивного плеєра */
         #audio-controls-container {
-            position: fixed; /* Фіксуємо плеєр внизу екрана */
+            position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
@@ -59,7 +62,7 @@
             border-top: 2px solid #fff;
             padding: 10px 20px;
             box-sizing: border-box;
-            display: none; /* Спочатку прихований */
+            display: none;
             z-index: 1000;
         }
         #audio-player {
@@ -69,14 +72,17 @@
         .speed-control {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            font-size: 0.9em;
+            /* Вирівнювання елементів швидкості */
+            justify-content: flex-end; 
+        }
+        .speed-control span:first-child {
+            margin-right: 10px;
         }
         .speed-control button {
             background-color: #fff;
             color: #000;
             border: 1px solid #000;
-            padding: 8px 15px; /* Великі кнопки для мобільного */
+            padding: 8px 15px;
             cursor: pointer;
             margin-left: 10px;
             font-weight: bold;
@@ -93,7 +99,6 @@
             text-align: center;
         }
         
-        /* Стиль для активного пункту */
         .active-instruction {
             background-color: #444;
             font-weight: bold;
@@ -125,7 +130,7 @@
         <audio id="audio-player" controls preload="metadata"></audio>
         
         <div class="speed-control">
-            <span>Швидкість відтворення:</span>
+            <span>Швидкість:</span>
             <div>
                 <span id="speed-display" class="speed-display">1.00</span>
                 <button onclick="adjustSpeed(-0.25)">-</button>
@@ -142,7 +147,6 @@
         
         let currentActiveItem = null;
 
-        // Додаємо обробники подій для всіх елементів списку
         document.querySelectorAll('#instruction-list li[data-file]').forEach(item => {
             item.addEventListener('click', function() {
                 loadAndPlay(this.getAttribute('data-file'), this);
@@ -153,9 +157,7 @@
             const mp3Src = `audio/${fileName}.mp3`;
             const oggSrc = `audio/${fileName}.ogg`;
 
-            // 1. Управління активним станом і відтворенням
             if (currentActiveItem === listItem && !audioPlayer.paused) {
-                // Якщо натиснули на активний елемент, зупиняємо
                 audioPlayer.pause();
                 currentActiveItem.classList.remove('active-instruction');
                 currentActiveItem = null;
@@ -163,36 +165,30 @@
                 return;
             }
 
-            // 2. Скидаємо попередній активний елемент
             if (currentActiveItem) {
                 currentActiveItem.classList.remove('active-instruction');
                 audioPlayer.pause();
                 audioPlayer.currentTime = 0;
             }
 
-            // 3. Налаштування та запуск нового аудіо
             currentActiveItem = listItem;
             currentActiveItem.classList.add('active-instruction');
             audioContainer.style.display = 'block';
             
-            // Очищаємо попередні джерела
             audioPlayer.innerHTML = '';
             
-            // Додаємо нові джерела
             audioPlayer.innerHTML = `
                 <source src="${mp3Src}" type="audio/mpeg">
                 <source src="${oggSrc}" type="audio/ogg">
                 Ваш браузер не підтримує аудіоформати MP3 чи OGG.
             `;
 
-            // Скидаємо швидкість на 1.0 при новому файлі
             audioPlayer.playbackRate = 1.0;
             speedDisplay.textContent = '1.00';
             
             audioPlayer.load();
             audioPlayer.play();
 
-            // Автоматичне скидання активного стану після завершення
             audioPlayer.onended = function() {
                 if (currentActiveItem) {
                     currentActiveItem.classList.remove('active-instruction');
@@ -202,12 +198,10 @@
             };
         }
 
-        // Функція для зміни швидкості відтворення (загальна)
         function adjustSpeed(delta) {
             let currentSpeed = Math.round(audioPlayer.playbackRate * 100) / 100;
             let newSpeed = currentSpeed + delta;
 
-            // Обмеження швидкості: від 1.0 до 2.0 (крок 0.25)
             if (newSpeed < 1.0) {
                 newSpeed = 1.0;
             }
