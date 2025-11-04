@@ -9,13 +9,13 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #000; /* Чорний фон */
-            color: #fff; /* Білий текст */
+            background-color: #000;
+            color: #fff;
         }
         .container {
             max-width: 800px;
             margin: 0 auto;
-            border: 2px solid #fff; /* Біла рамка */
+            border: 2px solid #fff;
             padding: 30px;
         }
         h1 {
@@ -42,9 +42,9 @@
             border-bottom: none;
         }
         a {
-            color: #fff; /* Білий для посилань */
+            color: #fff;
             text-decoration: none;
-            display: block; /* Щоб посилання займало всю ширину li */
+            display: block;
         }
         #audio-player {
             width: 100%;
@@ -61,17 +61,17 @@
         <h1>Інструкції з охорони праці на робочому місці для дільниці Long Test</h1>
 
         <ol class="instructions-list">
-            <li onclick="playInstruction('audio/vstup.wav')">Вступ</li>
+            <li onclick="playInstruction('audio/vstup.mp3')">Вступ</li>
 
-            <li onclick="playInstruction('audio/iop3.wav')">1. ІОП №3 Для присвоєння 1 групи з електробезпеки</li>
-            <li onclick="playInstruction('audio/iop5.wav')">2. ІОП №5 При користуванні електропобутовими приладами та офісною оргтехнікою</li>
-            <li onclick="playInstruction('audio/iop13.wav')">3. ІОП №13 При роботі з ручними візками</li>
-            <li onclick="playInstruction('audio/iop14.wav')">4. ІОП № 14 При виконання вантажно-розвантажувальних робіт</li>
-            <li onclick="playInstruction('audio/iop26.wav')">5. ІОП №26 Під час експлуатації, зберігання та транспортуванні балонів</li>
-            <li onclick="playInstruction('audio/iop27.wav')">6. ІОП №27 При роботі з ручним немеханізованим інструментом</li>
-            <li onclick="playInstruction('audio/iop31.wav')">7. ІОП №31 Для регулювальника РЕА дільниці Long Test</li>
-            <li onclick="playInstruction('audio/iop39.wav')">8. ІОП №39 При роботі та безпечному обслуговуванні посудин, що працюють під тиском</li>
-            <li onclick="playInstruction('audio/iop47.wav')">9. ІОП № 47 Для користувача ПЕОМ</li>
+            <li onclick="playInstruction('audio/iop3.mp3')">1. ІОП №3 Для присвоєння 1 групи з електробезпеки</li>
+            <li onclick="playInstruction('audio/iop5.mp3')">2. ІОП №5 При користуванні електропобутовими приладами та офісною оргтехнікою</li>
+            <li onclick="playInstruction('audio/iop13.mp3')">3. ІОП №13 При роботі з ручними візками</li>
+            <li onclick="playInstruction('audio/iop14.mp3')">4. ІОП № 14 При виконання вантажно-розвантажувальних робіт</li>
+            <li onclick="playInstruction('audio/iop26.mp3')">5. ІОП №26 Під час експлуатації, зберігання та транспортуванні балонів</li>
+            <li onclick="playInstruction('audio/iop27.mp3')">6. ІОП №27 При роботі з ручним немеханізованим інструментом</li>
+            <li onclick="playInstruction('audio/iop31.mp3')">7. ІОП №31 Для регулювальника РЕА дільниці Long Test</li>
+            <li onclick="playInstruction('audio/iop39.mp3')">8. ІОП №39 При роботі та безпечному обслуговуванні посудин, що працюють під тиском</li>
+            <li onclick="playInstruction('audio/iop47.mp3')">9. ІОП № 47 Для користувача ПЕОМ</li>
 
             <li><a href="first_aid.html">10. Порядок надання домедичної допомоги</a></li>
         </ol>
@@ -82,31 +82,23 @@
     <script>
         const audioPlayer = document.getElementById('audio-player');
         
-        // Зберігаємо останній відтворений елемент, щоб зупинити його
         let currentAudioSource = '';
 
         function playInstruction(audioSrc) {
-            // Перевіряємо, чи вже грає цей файл
             if (currentAudioSource === audioSrc && !audioPlayer.paused) {
                 audioPlayer.pause();
                 currentAudioSource = '';
                 return;
             }
 
-            // Зупиняємо попередній файл, якщо він був
             audioPlayer.pause();
-            audioPlayer.currentTime = 0; // Повертаємо на початок
+            audioPlayer.currentTime = 0;
 
-            // Встановлюємо нове джерело та запускаємо відтворення
             audioPlayer.src = audioSrc;
             audioPlayer.load();
             audioPlayer.play();
             currentAudioSource = audioSrc;
         }
-
-        // Приклад шляхів:
-        // Зверніть увагу: для роботи цього коду вам потрібно створити 9 файлів у папці "audio"
-        // (наприклад, "audio/vstup.wav", "audio/iop3.wav", "audio/iop5.wav" тощо)
     </script>
 
 </body>
