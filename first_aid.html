@@ -20,7 +20,6 @@
             padding: 30px;
         }
         h1 {
-            /* Зменшення розміру шрифту для заголовка */
             font-size: 1.5em; 
             text-align: center;
             text-transform: uppercase;
@@ -70,19 +69,33 @@
             width: 50px;
             text-align: center;
         }
+
+        /* ОНОВЛЕНІ СТИЛІ ДЛЯ КНОПКИ "НАЗАД" */
         a {
             color: #fff;
             text-decoration: underline;
             display: block;
+        }
+        .back-button {
+            font-size: 2.5em; /* Велика стрілка */
+            text-decoration: none;
+            font-weight: 700;
+            display: inline-block;
+            padding: 5px 10px; /* Велика тач-зона */
             margin-bottom: 20px;
+            transition: color 0.2s;
+        }
+        .back-button:hover {
+            color: #ccc;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <a href="index.html">← Назад до списку інструкцій</a>
-        <h1>Порядок надання домедичної допомоги</h1>
+        <a href="index.html" class="back-button">&#10094;</a>
+
+        <h1>Порядок надання домедичної допомоги (Аудіоінструкції)</h1>
 
         <div id="audio-list-container">
             </div>
