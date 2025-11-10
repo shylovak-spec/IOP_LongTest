@@ -1,15 +1,28 @@
 <script>
-    // ⚠️ ПЕРЕВІРТЕ ГІЛКУ: 'main' або 'master'
+    // ⚠️ ПЕРЕВІРТЕ ГІЛКУ: 'main' або 'master'. 
+    // Це найімовірніше місце помилки, якщо аудіо не працює.
     const BASE_AUDIO_URL = 'https://raw.githubusercontent.com/shylovak-spec/Audio_Assetss/main/'; 
 
     const firstAidAudios = [
         { name: "Вступ", fileName: "first_aid_vstup" },
         { name: "Зупинка кровообігу", fileName: "first_aid_circulation" },
-        // ... (інші ваші об'єкти)
+        { name: "Кровотеча", fileName: "first_aid_bleeding" },
+        { name: "Опік", fileName: "first_aid_burn" },
+        { name: "Отруєння", fileName: "first_aid_poisoning" },
+        { name: "Ушкодження очей", fileName: "first_aid_eyes" },
+        { name: "Переломи", fileName: "first_aid_fractures" },
+        { name: "Судоми", fileName: "first_aid_seizures" },
         { name: "Ураження електричним струмом", fileName: "first_aid_electric" }
     ];
 
     const container = document.getElementById('audio-list-container');
+    
+    // Запобіжник 1: Перевірка, чи існує контейнер для вставки HTML
+    if (!container) {
+        console.error('Не знайдено елемент #audio-list-container.');
+        return; 
+    }
+
     let htmlContent = '';
 
     firstAidAudios.forEach((item, index) => {
@@ -40,20 +53,24 @@
         `;
     });
 
-    // Одноразове вставлення HTML, щоб уникнути помилок
+    // Одноразове вставлення HTML для ефективності та надійності
     container.innerHTML = htmlContent; 
 
+    // Функція для зміни швидкості відтворення
     function adjustSpeed(audioId, delta) {
-        // Логіка adjustSpeed залишається тією самою
         const audio = document.getElementById(audioId);
-        if (!audio) return; // Запобіжник на випадок, якщо елемент не знайдено
+        // Запобіжник 2: Перевірка, чи знайдено елемент <audio>
+        if (!audio) return; 
         
+        // Отримуємо відповідний елемент для відображення швидкості
         const speedDisplay = document.getElementById(`speed_${audioId.split('_')[1]}`);
+        // Запобіжник 3: Перевірка, чи знайдено елемент відображення швидкості
         if (!speedDisplay) return;
 
         let currentSpeed = Math.round(audio.playbackRate * 100) / 100;
         let newSpeed = currentSpeed + delta;
 
+        // Обмеження швидкості (від 1.0 до 2.0)
         if (newSpeed < 1.0) {
             newSpeed = 1.0;
         }
