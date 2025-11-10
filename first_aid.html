@@ -1,31 +1,26 @@
 <script>
-    // Базовий URL для "сирих" файлів у репозиторії Audio_Assetss
-    // ВАЖЛИВО: 'main' - це назва вашої головної гілки. Якщо вона називається 'master', замініть 'main' на 'master'.
-    const BASE_AUDIO_URL = 'https://raw.githubusercontent.com/shylovak-spec/Audio_Assetss/main/';
+    // ⚠️ ПЕРЕВІРТЕ ГІЛКУ: 'main' або 'master'
+    const BASE_AUDIO_URL = 'https://raw.githubusercontent.com/shylovak-spec/Audio_Assetss/main/'; 
 
     const firstAidAudios = [
         { name: "Вступ", fileName: "first_aid_vstup" },
         { name: "Зупинка кровообігу", fileName: "first_aid_circulation" },
-        { name: "Кровотеча", fileName: "first_aid_bleeding" },
-        { name: "Опік", fileName: "first_aid_burn" },
-        { name: "Отруєння", fileName: "first_aid_poisoning" },
-        { name: "Ушкодження очей", fileName: "first_aid_eyes" },
-        { name: "Переломи", fileName: "first_aid_fractures" },
-        { name: "Судоми", fileName: "first_aid_seizures" },
+        // ... (інші ваші об'єкти)
         { name: "Ураження електричним струмом", fileName: "first_aid_electric" }
     ];
 
     const container = document.getElementById('audio-list-container');
+    let htmlContent = '';
 
     firstAidAudios.forEach((item, index) => {
         const itemId = `audio_${index}`;
         const speedId = `speed_${index}`;
         
-        // Формування URL-адрес з використанням BASE_AUDIO_URL
+        // Формуємо повні URL
         const mp3Src = `${BASE_AUDIO_URL}${item.fileName}.mp3`;
         const oggSrc = `${BASE_AUDIO_URL}${item.fileName}.ogg`;
 
-        const itemHTML = `
+        htmlContent += `
             <div class="audio-item">
                 <h2>${index + 1}. ${item.name}</h2>
                 <audio id="${itemId}" controls preload="metadata">
@@ -42,6 +37,34 @@
                     </div>
                 </div>
             </div>
+        `;
+    });
+
+    // Одноразове вставлення HTML, щоб уникнути помилок
+    container.innerHTML = htmlContent; 
+
+    function adjustSpeed(audioId, delta) {
+        // Логіка adjustSpeed залишається тією самою
+        const audio = document.getElementById(audioId);
+        if (!audio) return; // Запобіжник на випадок, якщо елемент не знайдено
+        
+        const speedDisplay = document.getElementById(`speed_${audioId.split('_')[1]}`);
+        if (!speedDisplay) return;
+
+        let currentSpeed = Math.round(audio.playbackRate * 100) / 100;
+        let newSpeed = currentSpeed + delta;
+
+        if (newSpeed < 1.0) {
+            newSpeed = 1.0;
+        }
+        if (newSpeed > 2.0) {
+            newSpeed = 2.0;
+        }
+
+        audio.playbackRate = newSpeed;
+        speedDisplay.textContent = newSpeed.toFixed(2);
+    }
+</script>
         `;
         container.innerHTML += itemHTML;
     });
