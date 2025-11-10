@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -21,7 +20,7 @@
             padding: 30px;
         }
         h1 {
-            font-size: 1.5em; 
+            font-size: 1.5em;
             text-align: center;
             text-transform: uppercase;
             color: #fff;
@@ -46,10 +45,7 @@
             margin-top: 10px;
             display: flex;
             align-items: center;
-            justify-content: flex-end; 
-        }
-        .speed-control span:first-child {
-            margin-right: 10px;
+            justify-content: flex-end;
         }
         .speed-control button {
             background-color: #fff;
@@ -71,18 +67,18 @@
             text-align: center;
         }
 
-        /* ОНОВЛЕНІ СТИЛІ ДЛЯ КНОПКИ "НАЗАД" */
+        /* Стиль кнопки "Назад" */
         a {
             color: #fff;
             text-decoration: underline;
             display: block;
         }
         .back-button {
-            font-size: 2.5em; /* Велика стрілка */
+            font-size: 2.5em;
             text-decoration: none;
             font-weight: 700;
             display: inline-block;
-            padding: 5px 10px; /* Велика тач-зона */
+            padding: 5px 10px;
             margin-bottom: 20px;
             transition: color 0.2s;
         }
@@ -98,9 +94,7 @@
 
         <h1>Порядок надання домедичної допомоги</h1>
 
-        <div id="audio-list-container">
-            </div>
-
+        <div id="audio-list-container"></div>
     </div>
 
     <script>
@@ -126,8 +120,8 @@
                 <div class="audio-item">
                     <h2>${index + 1}. ${item.name}</h2>
                     <audio id="${itemId}" controls preload="metadata">
-                        <source src="audio/${item.fileName}.mp3" type="audio/mpeg">
-                        <source src="audio/${item.fileName}.ogg" type="audio/ogg">
+                        <source src="Audio_Assetss/audio/${item.fileName}.mp3" type="audio/mpeg">
+                        <source src="Audio_Assetss/audio/${item.fileName}.ogg" type="audio/ogg">
                         Ваш браузер не підтримує аудіоформати MP3 чи OGG.
                     </audio>
                     <div class="speed-control">
@@ -145,17 +139,12 @@
 
         function adjustSpeed(audioId, delta) {
             const audio = document.getElementById(audioId);
-            const speedDisplay = document.getElementById(`speed_${audioId.split('_')[1]}`);
-            
-            let currentSpeed = Math.round(audio.playbackRate * 100) / 100;
-            let newSpeed = currentSpeed + delta;
+            const index = audioId.split('_')[1];
+            const speedDisplay = document.getElementById(`speed_${index}`);
 
-            if (newSpeed < 1.0) {
-                newSpeed = 1.0;
-            }
-            if (newSpeed > 2.0) {
-                newSpeed = 2.0;
-            }
+            let newSpeed = Math.round((audio.playbackRate + delta) * 100) / 100;
+            if (newSpeed < 1.0) newSpeed = 1.0;
+            if (newSpeed > 2.0) newSpeed = 2.0;
 
             audio.playbackRate = newSpeed;
             speedDisplay.textContent = newSpeed.toFixed(2);
