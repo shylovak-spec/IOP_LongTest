@@ -143,13 +143,10 @@
         const audioPlayer = document.getElementById('audio-player');
         const audioContainer = document.getElementById('audio-controls-container');
         const speedDisplay = document.getElementById('speed-display');
+        const instructionList = document.getElementById('instruction-list');
         
         let currentActiveItem = null;
 
-        // ⚠️ BASE URL для "сирих" файлів у репозиторії Audio_Assetss
-        const BASE_AUDIO_URL = 'https://raw.githubusercontent.com/shylovak-spec/Audio_Assetss/main/';
-
-        // Ініціалізація обробників подій для елементів списку
         document.querySelectorAll('#instruction-list li[data-file]').forEach(item => {
             item.addEventListener('click', function() {
                 loadAndPlay(this.getAttribute('data-file'), this);
@@ -157,11 +154,9 @@
         });
 
         function loadAndPlay(fileName, listItem) {
-            // Формування повного Raw URL-адреси до аудіо
-            const mp3Src = `${BASE_AUDIO_URL}${fileName}.mp3`;
-            const oggSrc = `${BASE_AUDIO_URL}${fileName}.ogg`;
+            const mp3Src = `audio/${fileName}.mp3`;
+            const oggSrc = `audio/${fileName}.ogg`;
 
-            // Логіка паузи/відновлення
             if (currentActiveItem === listItem && !audioPlayer.paused) {
                 audioPlayer.pause();
                 currentActiveItem.classList.remove('active-instruction');
@@ -170,7 +165,6 @@
                 return;
             }
 
-            // Зупинка попереднього відтворення
             if (currentActiveItem) {
                 currentActiveItem.classList.remove('active-instruction');
                 audioPlayer.pause();
@@ -181,7 +175,8 @@
             currentActiveItem.classList.add('active-instruction');
             audioContainer.style.display = 'block';
             
-            // Вставка джерел аудіо в плеєр
+            audioPlayer.innerHTML = '';
+            
             audioPlayer.innerHTML = `
                 <source src="${mp3Src}" type="audio/mpeg">
                 <source src="${oggSrc}" type="audio/ogg">
@@ -194,7 +189,6 @@
             audioPlayer.load();
             audioPlayer.play();
 
-            // Логіка після завершення відтворення
             audioPlayer.onended = function() {
                 if (currentActiveItem) {
                     currentActiveItem.classList.remove('active-instruction');
@@ -204,12 +198,10 @@
             };
         }
 
-        // Функція регулювання швидкості
         function adjustSpeed(delta) {
             let currentSpeed = Math.round(audioPlayer.playbackRate * 100) / 100;
             let newSpeed = currentSpeed + delta;
 
-            // Обмеження швидкості
             if (newSpeed < 1.0) {
                 newSpeed = 1.0;
             }
