@@ -1,5 +1,5 @@
-<<script>
-    // ВАЖЛИВО: Перевірте назву гілки (main чи master)
+<script>
+    // BASE URL для "сирих" файлів у репозиторії Audio_Assetss
     const BASE_AUDIO_URL = 'https://raw.githubusercontent.com/shylovak-spec/Audio_Assetss/main/'; 
 
     const firstAidAudios = [
@@ -16,14 +16,15 @@
 
     const container = document.getElementById('audio-list-container');
     
-    // Запобіжник: Якщо контейнер не знайдено, зупиняємо скрипт
+    // Запобіжник: перевірка, чи існує HTML-контейнер
     if (!container) {
-        console.error('Не знайдено елемент #audio-list-container. HTML-розмітка неповна.');
+        console.error('Не знайдено елемент #audio-list-container. Скрипт зупинено.');
         return; 
     }
 
     let htmlContent = '';
 
+    // Динамічне створення HTML-елементів для кожного аудіофайлу
     firstAidAudios.forEach((item, index) => {
         const itemId = `audio_${index}`;
         const speedId = `speed_${index}`;
@@ -52,42 +53,22 @@
         `;
     });
 
-    // Одноразове вставлення HTML
+    // Вставляємо згенерований HTML-код у контейнер
     container.innerHTML = htmlContent; 
 
+    // Функція для зміни швидкості відтворення
     function adjustSpeed(audioId, delta) {
         const audio = document.getElementById(audioId);
         if (!audio) return; 
         
+        // Отримуємо відповідний елемент для відображення швидкості
         const speedDisplay = document.getElementById(`speed_${audioId.split('_')[1]}`);
         if (!speedDisplay) return;
 
         let currentSpeed = Math.round(audio.playbackRate * 100) / 100;
         let newSpeed = currentSpeed + delta;
 
-        if (newSpeed < 1.0) {
-            newSpeed = 1.0;
-        }
-        if (newSpeed > 2.0) {
-            newSpeed = 2.0;
-        }
-
-        audio.playbackRate = newSpeed;
-        speedDisplay.textContent = newSpeed.toFixed(2);
-    }
-</script>
-        `;
-        container.innerHTML += itemHTML;
-    });
-
-    function adjustSpeed(audioId, delta) {
-        const audio = document.getElementById(audioId);
-        // Отримання індексу для оновлення відповідного speedDisplay
-        const speedDisplay = document.getElementById(`speed_${audioId.split('_')[1]}`);
-        
-        let currentSpeed = Math.round(audio.playbackRate * 100) / 100;
-        let newSpeed = currentSpeed + delta;
-
+        // Обмеження швидкості (від 1.0 до 2.0)
         if (newSpeed < 1.0) {
             newSpeed = 1.0;
         }
