@@ -2,14 +2,13 @@
     const audioPlayer = document.getElementById('audio-player');
     const audioContainer = document.getElementById('audio-controls-container');
     const speedDisplay = document.getElementById('speed-display');
-    const instructionList = document.getElementById('instruction-list');
     
     let currentActiveItem = null;
 
-    // Базовий URL для "сирих" файлів у репозиторії Audio_Assetss
-    // ВАЖЛИВО: 'main' - це назва вашої головної гілки. Якщо вона називається 'master', замініть 'main' на 'master'.
+    // ВАЖЛИВО: Перевірте назву гілки (main чи master)
     const BASE_AUDIO_URL = 'https://raw.githubusercontent.com/shylovak-spec/Audio_Assetss/main/';
 
+    // Обробка натискань на елементи списку
     document.querySelectorAll('#instruction-list li[data-file]').forEach(item => {
         item.addEventListener('click', function() {
             loadAndPlay(this.getAttribute('data-file'), this);
@@ -17,10 +16,11 @@
     });
 
     function loadAndPlay(fileName, listItem) {
-        // Тепер шляхи формуються з використанням BASE_AUDIO_URL
+        // Формування повного Raw URL-адреси
         const mp3Src = `${BASE_AUDIO_URL}${fileName}.mp3`;
         const oggSrc = `${BASE_AUDIO_URL}${fileName}.ogg`;
 
+        // Логіка паузи/відновлення
         if (currentActiveItem === listItem && !audioPlayer.paused) {
             audioPlayer.pause();
             currentActiveItem.classList.remove('active-instruction');
@@ -29,6 +29,7 @@
             return;
         }
 
+        // Зупинка попереднього відтворення
         if (currentActiveItem) {
             currentActiveItem.classList.remove('active-instruction');
             audioPlayer.pause();
@@ -39,8 +40,7 @@
         currentActiveItem.classList.add('active-instruction');
         audioContainer.style.display = 'block';
         
-        audioPlayer.innerHTML = '';
-        
+        // Вставка джерел аудіо в плеєр
         audioPlayer.innerHTML = `
             <source src="${mp3Src}" type="audio/mpeg">
             <source src="${oggSrc}" type="audio/ogg">
@@ -53,6 +53,7 @@
         audioPlayer.load();
         audioPlayer.play();
 
+        // Логіка після завершення відтворення
         audioPlayer.onended = function() {
             if (currentActiveItem) {
                 currentActiveItem.classList.remove('active-instruction');
