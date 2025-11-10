@@ -16,15 +16,15 @@
 
     const container = document.getElementById('audio-list-container');
     
-    // Запобіжник: перевірка, чи існує HTML-контейнер
+    // Запобіжник: якщо контейнер не знайдено, скрипт зупиняється, але без критичної помилки
     if (!container) {
-        console.error('Не знайдено елемент #audio-list-container. Скрипт зупинено.');
+        console.error('Не знайдено елемент #audio-list-container. HTML-розмітка неповна.');
         return; 
     }
 
     let htmlContent = '';
 
-    // Динамічне створення HTML-елементів для кожного аудіофайлу
+    // Динамічне створення HTML-елементів
     firstAidAudios.forEach((item, index) => {
         const itemId = `audio_${index}`;
         const speedId = `speed_${index}`;
@@ -61,14 +61,12 @@
         const audio = document.getElementById(audioId);
         if (!audio) return; 
         
-        // Отримуємо відповідний елемент для відображення швидкості
         const speedDisplay = document.getElementById(`speed_${audioId.split('_')[1]}`);
         if (!speedDisplay) return;
 
         let currentSpeed = Math.round(audio.playbackRate * 100) / 100;
         let newSpeed = currentSpeed + delta;
 
-        // Обмеження швидкості (від 1.0 до 2.0)
         if (newSpeed < 1.0) {
             newSpeed = 1.0;
         }
