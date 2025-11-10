@@ -1,6 +1,5 @@
-<script>
-    // ⚠️ ПЕРЕВІРТЕ ГІЛКУ: 'main' або 'master'. 
-    // Це найімовірніше місце помилки, якщо аудіо не працює.
+<<script>
+    // ВАЖЛИВО: Перевірте назву гілки (main чи master)
     const BASE_AUDIO_URL = 'https://raw.githubusercontent.com/shylovak-spec/Audio_Assetss/main/'; 
 
     const firstAidAudios = [
@@ -17,9 +16,9 @@
 
     const container = document.getElementById('audio-list-container');
     
-    // Запобіжник 1: Перевірка, чи існує контейнер для вставки HTML
+    // Запобіжник: Якщо контейнер не знайдено, зупиняємо скрипт
     if (!container) {
-        console.error('Не знайдено елемент #audio-list-container.');
+        console.error('Не знайдено елемент #audio-list-container. HTML-розмітка неповна.');
         return; 
     }
 
@@ -29,7 +28,7 @@
         const itemId = `audio_${index}`;
         const speedId = `speed_${index}`;
         
-        // Формуємо повні URL
+        // Формуємо повні Raw URL-адреси
         const mp3Src = `${BASE_AUDIO_URL}${item.fileName}.mp3`;
         const oggSrc = `${BASE_AUDIO_URL}${item.fileName}.ogg`;
 
@@ -53,24 +52,19 @@
         `;
     });
 
-    // Одноразове вставлення HTML для ефективності та надійності
+    // Одноразове вставлення HTML
     container.innerHTML = htmlContent; 
 
-    // Функція для зміни швидкості відтворення
     function adjustSpeed(audioId, delta) {
         const audio = document.getElementById(audioId);
-        // Запобіжник 2: Перевірка, чи знайдено елемент <audio>
         if (!audio) return; 
         
-        // Отримуємо відповідний елемент для відображення швидкості
         const speedDisplay = document.getElementById(`speed_${audioId.split('_')[1]}`);
-        // Запобіжник 3: Перевірка, чи знайдено елемент відображення швидкості
         if (!speedDisplay) return;
 
         let currentSpeed = Math.round(audio.playbackRate * 100) / 100;
         let newSpeed = currentSpeed + delta;
 
-        // Обмеження швидкості (від 1.0 до 2.0)
         if (newSpeed < 1.0) {
             newSpeed = 1.0;
         }
