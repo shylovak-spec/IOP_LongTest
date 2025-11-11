@@ -102,7 +102,7 @@
         <ol id="instruction-list">
             <li data-file="vstup">Вступ</li>
             <li data-file="iop3">1. ІОП №3 Для присвоєння 1 групи з електробезпеки</li>
-            <li data-file="iop5">2. ІОП №5 При користуванні електропобутовими приладами та офісною оргтехнікою</li>
+            <li data-file-path="iop5">2. ІОП №5 При користуванні електропобутовими приладами та офісною оргтехнікою</li>
             <li data-file="iop13">3. ІОП №13 При роботі з ручними візками</li>
             <li data-file="iop14">4. ІОП №14 При виконанні вантажно-розвантажувальних робіт</li>
             <li data-file="iop26">5. ІОП №26 Під час експлуатації, зберігання та транспортуванні балонів</li>
@@ -130,8 +130,12 @@
         const audioPlayer = document.getElementById('audio-player');
         const audioContainer = document.getElementById('audio-controls-container');
         const speedDisplay = document.getElementById('speed-display');
-        const instructionList = document.getElementById('instruction-list');
+        
         let currentActiveItem = null;
+
+        // ✅ ВИПРАВЛЕННЯ: Абсолютний шлях до репозиторію з аудіофайлами
+        // (Припускаємо, що аудіофайли знаходяться у корені гілки main репозиторію Audio_Assetss)
+        const BASE_AUDIO_URL = 'https://raw.githubusercontent.com/shylovak-spec/Audio_Assetss/main/';
 
         document.querySelectorAll('#instruction-list li[data-file]').forEach(item => {
             item.addEventListener('click', function() {
@@ -140,9 +144,9 @@
         });
 
         function loadAndPlay(fileName, listItem) {
-            // 🔹 ЗМІНА: новий шлях до аудіофайлів
-            const mp3Src = `Audio_Assetss/audio/${fileName}.mp3`;
-            const oggSrc = `Audio_Assetss/audio/${fileName}.ogg`;
+            // ✅ ВИПРАВЛЕННЯ: Використання BASE_AUDIO_URL для зовнішнього завантаження
+            const mp3Src = `${BASE_AUDIO_URL}${fileName}.mp3`;
+            const oggSrc = `${BASE_AUDIO_URL}${fileName}.ogg`;
 
             if (currentActiveItem === listItem && !audioPlayer.paused) {
                 audioPlayer.pause();
@@ -171,6 +175,7 @@
             audioPlayer.playbackRate = 1.0;
             speedDisplay.textContent = '1.00';
             
+            // Завантаження нового джерела та відтворення
             audioPlayer.load();
             audioPlayer.play();
 
