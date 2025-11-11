@@ -118,6 +118,7 @@
     
     if (!container) {
         console.error('Критична помилка: Не знайдено елемент #audio-list-container.');
+        // Якщо контейнер не знайдено, список аудіо не буде відображено.
         return; 
     }
 
@@ -151,8 +152,10 @@
         `;
     });
 
+    // Вставка згенерованого HTML в DOM
     container.innerHTML = htmlContent; 
 
+    // ✅ ФУНКЦІЯ ВИЗНАЧЕНА ГЛОБАЛЬНО, ЩОБ ПРАЦЮВАВ ONCLICK
     function adjustSpeed(audioId, delta) {
         const audio = document.getElementById(audioId);
         if (!audio) return; 
