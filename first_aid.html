@@ -66,8 +66,6 @@
             width: 50px;
             text-align: center;
         }
-
-        /* Стиль кнопки "Назад" */
         a {
             color: #fff;
             text-decoration: underline;
@@ -91,17 +89,13 @@
 
     <div class="container">
         <a href="index.html" class="back-button">&#10094;</a>
-
         <h1>Порядок надання домедичної допомоги</h1>
-
         <div id="audio-list-container"></div>
     </div>
 
     <script>
-    // ✅ Правильний шлях, що включає папку 'audio/'
     const BASE_AUDIO_URL = 'https://raw.githubusercontent.com/shylovak-spec/Audio_Assetss/main/audio/'; 
 
-    // ✅ Імена файлів, що збігаються з регістром на GitHub
     const firstAidAudios = [
         { name: "Вступ", fileName: "first_aid_vstup" },
         { name: "Зупинка кровообігу", fileName: "first_aid_circulation" },
@@ -115,68 +109,51 @@
     ];
 
     const container = document.getElementById('audio-list-container');
-    
-    if (!container) {
-        console.error('Критична помилка: Не знайдено елемент #audio-list-container.');
-        return; 
-    }
 
-    let htmlContent = '';
+    if (container) {
+        let htmlContent = '';
 
-    firstAidAudios.forEach((item, index) => {
-        const itemId = `audio_${index}`;
-        const speedId = `speed_${index}`;
-        
-        // Формування повних Raw URL-адрес
-        const mp3Src = `${BASE_AUDIO_URL}${item.fileName}.mp3`;
-        const oggSrc = `${BASE_AUDIO_URL}${item.fileName}.ogg`;
+        firstAidAudios.forEach((item, index) => {
+            const itemId = `audio_${index}`;
+            const speedId = `speed_${index}`;
+            const mp3Src = `${BASE_AUDIO_URL}${item.fileName}.mp3`;
+            const oggSrc = `${BASE_AUDIO_URL}${item.fileName}.ogg`;
 
-        htmlContent += `
-            <div class="audio-item">
-                <h2>${index + 1}. ${item.name}</h2>
-                <audio id="${itemId}" controls preload="metadata">
-                    <source src="${mp3Src}" type="audio/mpeg">
-                    <source src="${oggSrc}" type="audio/ogg">
-                    Ваш браузер не підтримує аудіоформати MP3 чи OGG.
-                </audio>
-                <div class="speed-control">
-                    <span>Швидкість:</span>
-                    <div>
-                        <span id="${speedId}" class="speed-display">1.00</span>
-                        <button onclick="adjustSpeed('${itemId}', -0.25)">-</button>
-                        <button onclick="adjustSpeed('${itemId}', 0.25)">+</button>
+            htmlContent += `
+                <div class="audio-item">
+                    <h2>${index + 1}. ${item.name}</h2>
+                    <audio id="${itemId}" controls preload="metadata">
+                        <source src="${mp3Src}" type="audio/mpeg">
+                        <source src="${oggSrc}" type="audio/ogg">
+                        Ваш браузер не підтримує аудіоформати MP3 чи OGG.
+                    </audio>
+                    <div class="speed-control">
+                        <span>Швидкість:</span>
+                        <div>
+                            <span id="${speedId}" class="speed-display">1.00</span>
+                            <button onclick="adjustSpeed('${itemId}', -0.25)">-</button>
+                            <button onclick="adjustSpeed('${itemId}', 0.25)">+</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        `;
-    });
+            `;
+        });
 
-    // Вставка згенерованого HTML в DOM
-    container.innerHTML = htmlContent; 
+        container.innerHTML = htmlContent;
+    } else {
+        console.error('❌ Не знайдено контейнер #audio-list-container');
+    }
 
-    // 🚩 ФУНКЦІЯ adjustSpeed, ЯКА ПОВИННА БУТИ ВИЗНАЧЕНА ДЛЯ КНОПОК
     function adjustSpeed(audioId, delta) {
         const audio = document.getElementById(audioId);
-        if (!audio) return; 
-        
-        // Витягуємо індекс, щоб знайти відповідний елемент відображення швидкості
         const speedDisplay = document.getElementById(`speed_${audioId.split('_')[1]}`);
-        if (!speedDisplay) return;
+        if (!audio || !speedDisplay) return;
 
-        let currentSpeed = Math.round(audio.playbackRate * 100) / 100;
-        let newSpeed = currentSpeed + delta;
-
-        if (newSpeed < 1.0) {
-            newSpeed = 1.0;
-        }
-        if (newSpeed > 2.0) {
-            newSpeed = 2.0;
-        }
-
+        let newSpeed = Math.min(2.0, Math.max(1.0, audio.playbackRate + delta));
         audio.playbackRate = newSpeed;
         speedDisplay.textContent = newSpeed.toFixed(2);
     }
-</script>
+    </script>
 
 </body>
 </html>
