@@ -127,75 +127,73 @@
     </div>
 
     <script>
-        const audioPlayer = document.getElementById('audio-player');
-        const audioContainer = document.getElementById('audio-controls-container');
-        const speedDisplay = document.getElementById('speed-display');
-        
-        let currentActiveItem = null;
+    const audioPlayer = document.getElementById('audio-player');
+    const audioContainer = document.getElementById('audio-controls-container');
+    const speedDisplay = document.getElementById('speed-display');
+    
+    let currentActiveItem = null;
 
-        // ✅ ВИПРАВЛЕННЯ: Абсолютний шлях до репозиторію з аудіофайлами
-        // (Припускаємо, що аудіофайли знаходяться у корені гілки main репозиторію Audio_Assetss)
-        const BASE_AUDIO_URL = 'https://raw.githubusercontent.com/shylovak-spec/Audio_Assetss/main/';
+    // ✅ ВИПРАВЛЕННЯ: Це тепер правильний шлях до папки 'audio/'
+    const BASE_AUDIO_URL = 'https://raw.githubusercontent.com/shylovak-spec/Audio_Assetss/main/audio/';
 
-        document.querySelectorAll('#instruction-list li[data-file]').forEach(item => {
-            item.addEventListener('click', function() {
-                loadAndPlay(this.getAttribute('data-file'), this);
-            });
+    document.querySelectorAll('#instruction-list li[data-file]').forEach(item => {
+        item.addEventListener('click', function() {
+            loadAndPlay(this.getAttribute('data-file'), this);
         });
+    });
 
-        function loadAndPlay(fileName, listItem) {
-            // ✅ ВИПРАВЛЕННЯ: Використання BASE_AUDIO_URL для зовнішнього завантаження
-            const mp3Src = `${BASE_AUDIO_URL}${fileName}.mp3`;
-            const oggSrc = `${BASE_AUDIO_URL}${fileName}.ogg`;
+    function loadAndPlay(fileName, listItem) {
+        // Формування повного Raw URL-адреси
+        const mp3Src = `${BASE_AUDIO_URL}${fileName}.mp3`;
+        const oggSrc = `${BASE_AUDIO_URL}${fileName}.ogg`;
 
-            if (currentActiveItem === listItem && !audioPlayer.paused) {
-                audioPlayer.pause();
+        if (currentActiveItem === listItem && !audioPlayer.paused) {
+            audioPlayer.pause();
+            currentActiveItem.classList.remove('active-instruction');
+            currentActiveItem = null;
+            audioContainer.style.display = 'none';
+            return;
+        }
+
+        if (currentActiveItem) {
+            currentActiveItem.classList.remove('active-instruction');
+            audioPlayer.pause();
+            audioPlayer.currentTime = 0;
+        }
+
+        currentActiveItem = listItem;
+        currentActiveItem.classList.add('active-instruction');
+        audioContainer.style.display = 'block';
+        
+        audioPlayer.innerHTML = `
+            <source src="${mp3Src}" type="audio/mpeg">
+            <source src="${oggSrc}" type="audio/ogg">
+            Ваш браузер не підтримує аудіоформати MP3 чи OGG.
+        `;
+
+        audioPlayer.playbackRate = 1.0;
+        speedDisplay.textContent = '1.00';
+        
+        audioPlayer.load();
+        audioPlayer.play();
+
+        audioPlayer.onended = function() {
+            if (currentActiveItem) {
                 currentActiveItem.classList.remove('active-instruction');
                 currentActiveItem = null;
                 audioContainer.style.display = 'none';
-                return;
             }
+        };
+    }
 
-            if (currentActiveItem) {
-                currentActiveItem.classList.remove('active-instruction');
-                audioPlayer.pause();
-                audioPlayer.currentTime = 0;
-            }
-
-            currentActiveItem = listItem;
-            currentActiveItem.classList.add('active-instruction');
-            audioContainer.style.display = 'block';
-            
-            audioPlayer.innerHTML = `
-                <source src="${mp3Src}" type="audio/mpeg">
-                <source src="${oggSrc}" type="audio/ogg">
-                Ваш браузер не підтримує аудіоформати MP3 чи OGG.
-            `;
-
-            audioPlayer.playbackRate = 1.0;
-            speedDisplay.textContent = '1.00';
-            
-            // Завантаження нового джерела та відтворення
-            audioPlayer.load();
-            audioPlayer.play();
-
-            audioPlayer.onended = function() {
-                if (currentActiveItem) {
-                    currentActiveItem.classList.remove('active-instruction');
-                    currentActiveItem = null;
-                    audioContainer.style.display = 'none';
-                }
-            };
-        }
-
-        function adjustSpeed(delta) {
-            let newSpeed = audioPlayer.playbackRate + delta;
-            if (newSpeed < 1.0) newSpeed = 1.0;
-            if (newSpeed > 2.0) newSpeed = 2.0;
-            audioPlayer.playbackRate = newSpeed;
-            speedDisplay.textContent = newSpeed.toFixed(2);
-        }
-    </script>
+    function adjustSpeed(delta) {
+        let newSpeed = audioPlayer.playbackRate + delta;
+        if (newSpeed < 1.0) newSpeed = 1.0;
+        if (newSpeed > 2.0) newSpeed = 2.0;
+        audioPlayer.playbackRate = newSpeed;
+        speedDisplay.textContent = newSpeed.toFixed(2);
+    }
+</script>
 
 </body>
 </html>
