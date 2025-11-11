@@ -101,7 +101,7 @@
     // ✅ Правильний шлях, що включає папку 'audio/'
     const BASE_AUDIO_URL = 'https://raw.githubusercontent.com/shylovak-spec/Audio_Assetss/main/audio/'; 
 
-    // ✅ Виправлено імена файлів, щоб вони повністю збігалися з регістром на GitHub
+    // ✅ Імена файлів, що збігаються з регістром на GitHub
     const firstAidAudios = [
         { name: "Вступ", fileName: "first_aid_vstup" },
         { name: "Зупинка кровообігу", fileName: "first_aid_circulation" },
@@ -118,7 +118,6 @@
     
     if (!container) {
         console.error('Критична помилка: Не знайдено елемент #audio-list-container.');
-        // Якщо контейнер не знайдено, список аудіо не буде відображено.
         return; 
     }
 
@@ -155,11 +154,12 @@
     // Вставка згенерованого HTML в DOM
     container.innerHTML = htmlContent; 
 
-    // ✅ ФУНКЦІЯ ВИЗНАЧЕНА ГЛОБАЛЬНО, ЩОБ ПРАЦЮВАВ ONCLICK
+    // 🚩 ФУНКЦІЯ adjustSpeed, ЯКА ПОВИННА БУТИ ВИЗНАЧЕНА ДЛЯ КНОПОК
     function adjustSpeed(audioId, delta) {
         const audio = document.getElementById(audioId);
         if (!audio) return; 
         
+        // Витягуємо індекс, щоб знайти відповідний елемент відображення швидкості
         const speedDisplay = document.getElementById(`speed_${audioId.split('_')[1]}`);
         if (!speedDisplay) return;
 
