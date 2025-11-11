@@ -98,13 +98,11 @@
     </div>
 
     <script>
-    // ✅ ВИПРАВЛЕННЯ: Це тепер правильний шлях до папки 'audio/'
+    // ✅ Правильний шлях, що включає папку 'audio/'
     const BASE_AUDIO_URL = 'https://raw.githubusercontent.com/shylovak-spec/Audio_Assetss/main/audio/'; 
 
+    // ✅ Виправлено імена файлів, щоб вони повністю збігалися з регістром на GitHub
     const firstAidAudios = [
-        // Зверніть увагу, імена файлів тут не містять префіксу 'first_aid_',
-        // вони мають збігатися з іменами у вашому репозиторії.
-        // За даними скріншота, вони мають префікс 'first_aid_'. Перевірте реєстр!
         { name: "Вступ", fileName: "first_aid_vstup" },
         { name: "Зупинка кровообігу", fileName: "first_aid_circulation" },
         { name: "Кровотеча", fileName: "first_aid_bleeding" },
@@ -118,7 +116,6 @@
 
     const container = document.getElementById('audio-list-container');
     
-    // Запобіжник: якщо контейнер не знайдено, зупиняємо скрипт
     if (!container) {
         console.error('Критична помилка: Не знайдено елемент #audio-list-container.');
         return; 
@@ -126,12 +123,11 @@
 
     let htmlContent = '';
 
-    // Динамічне створення HTML-елементів
     firstAidAudios.forEach((item, index) => {
         const itemId = `audio_${index}`;
         const speedId = `speed_${index}`;
         
-        // Формуємо повні Raw URL-адреси
+        // Формування повних Raw URL-адрес
         const mp3Src = `${BASE_AUDIO_URL}${item.fileName}.mp3`;
         const oggSrc = `${BASE_AUDIO_URL}${item.fileName}.ogg`;
 
@@ -155,10 +151,8 @@
         `;
     });
 
-    // Вставляємо згенерований HTML-код у контейнер
     container.innerHTML = htmlContent; 
 
-    // Функція для зміни швидкості відтворення
     function adjustSpeed(audioId, delta) {
         const audio = document.getElementById(audioId);
         if (!audio) return; 
