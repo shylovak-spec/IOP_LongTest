@@ -70,10 +70,14 @@
         li:last-child {
             border-bottom: none;
         }
-        a.instruction-link {
-            color: #fff;
-            text-decoration: none;
-            display: block;
+        #instruction-list a, 
+        #instruction-list a:visited, 
+        #instruction-list a:hover, 
+        #instruction-list a:active {
+            color: #ffffff !important; 
+            text-decoration: none !important;
+            display: block; /* Щоб можна було натиснути на весь рядок */
+            width: 100%;
         }
         #audio-controls-container {
             position: fixed;
